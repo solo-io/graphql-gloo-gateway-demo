@@ -1,0 +1,56 @@
+common:
+  addonNamespace: gloo-mesh
+  cluster: gloo-gateway
+prometheus:
+  enabled: true
+glooMgmtServer:
+  serviceType: ClusterIP
+  registerCluster: true
+  enabled: true
+glooUi:
+  enabled: true
+redis:
+  deployment:
+    enabled: true
+telemetryGateway:
+  enabled: true
+  service:
+    type: ClusterIP
+glooAgent:
+  enabled: true
+  relay:
+    serverAddress: gloo-mesh-mgmt-server.gloo-mesh:9900
+istioInstallations:
+  enabled: true
+  controlPlane:
+      enabled: true
+      installations:
+          - revision: 1-17
+            istioOperatorSpec:
+              hub: us-docker.pkg.dev/gloo-mesh/istio-workshops
+              tag: 1.17.1-solo
+              meshConfig:
+                accessLogFile: /dev/stdout
+                accessLogEncoding: JSON
+  northSouthGateways:
+      - # Install the gateway in the cluster.
+        enabled: true
+        # List of Istio gateway installations. For more info, see the [GatewayInstallation reference](https://docs.solo.io/gloo-mesh-enterprise/latest/reference/api/gateway_lifecycle_manager/#gatewayinstallation).
+        installations:
+          - # Istio revision for this installation, such as '1-17'. Defaults to 'AUTO', which installs the default supported version of Gloo Istio.
+            gatewayRevision: 1-17
+            # IstioOperator specification for the gateway. For more info, see the [IstioOperatorSpec reference](https://docs.solo.io/gloo-mesh-enterprise/latest/reference/api/istio_operator/#istiooperatorspec).
+            istioOperatorSpec:
+              profile: empty
+        # Name of the gateway. Must be unique.
+        name: istio-ingressgateway                
+telemetryCollector:
+  enabled: true
+  config:
+    exporters:
+      otlp:
+        endpoint: gloo-metrics-gateway.gloo-mesh:4317
+extAuthService:
+  enabled: true
+rateLimiter:
+  enabled: true

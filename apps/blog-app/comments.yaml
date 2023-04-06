@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+  labels:
+    app: comments
+  name: comments
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: comments
+  template:
+    metadata:
+      labels:
+        app: comments
+    spec:
+      containers:
+      - image: docker.io/asayah/comments
+        imagePullPolicy: Always
+        name: comments
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File     
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: comments
+  name: comments
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: comments
+  sessionAffinity: None
+  type: ClusterIP

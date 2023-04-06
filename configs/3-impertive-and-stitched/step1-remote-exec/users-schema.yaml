@@ -1,0 +1,17 @@
+apiVersion: apimanagement.gloo.solo.io/v2
+kind: ApiDoc
+metadata:
+  name: users
+  namespace: gloo-mesh
+spec:
+  graphql:
+    schemaDefinition: |
+      type User {
+        id: Int!
+        username: String
+        lastname: String
+        firstname: String
+      }
+      type Query {
+        getUserDetails(username: String!): User
+      }

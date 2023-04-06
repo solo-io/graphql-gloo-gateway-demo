@@ -1,0 +1,36 @@
+apiVersion: networking.gloo.solo.io/v2
+kind: RouteTable
+metadata:
+  name: default
+  namespace: gloo-mesh
+spec:
+  hosts:
+    - '*'
+  virtualGateways:
+    - name: istio-ingressgateway
+      namespace: gloo-mesh
+      cluster: gloo-gateway
+  http:
+  - graphql:
+      options:
+        logSensitiveInfo: true
+      schema:
+        name: blogs
+        namespace: gloo-mesh
+        clusterName: gloo-gateway
+    name: gql
+    matchers:
+    - uri:
+        prefix: /graphql
+  - matchers:
+    - uri:
+        prefix: /
+    forwardTo:
+      destinations:
+      - ref:
+          name: gloo-mesh-ui
+          namespace: gloo-mesh
+          cluster: gloo-gateway
+        port:
+          number: 8090
+        kind: SERVICE        

@@ -1,0 +1,17 @@
+apiVersion: apimanagement.gloo.solo.io/v2
+kind: GraphQLSchema
+metadata:
+  name: users
+  namespace: gloo-mesh
+spec:
+  proxied:
+    graphqlServers:
+      - ref:
+          name: users
+          namespace: default
+        port:
+          number: 80   
+  schemaRef:
+    name: users
+    namespace: gloo-mesh
+    clusterName: gloo-gateway

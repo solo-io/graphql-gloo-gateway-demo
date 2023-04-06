@@ -1,0 +1,21 @@
+apiVersion: apimanagement.gloo.solo.io/v2
+kind: GraphQLStitchedSchema
+metadata:
+  name: stitched
+  namespace: gloo-mesh
+spec:
+  subschemas:
+  - schema:
+      name: blogs
+      namespace: gloo-mesh
+      clusterName: gloo-gateway
+  - schema:
+      name: users
+      namespace: gloo-mesh
+      clusterName: gloo-gateway
+    typeMerge:
+      User:
+        selectionSet: '{ username }'
+        queryName: getUserDetails
+        args:
+          username: username

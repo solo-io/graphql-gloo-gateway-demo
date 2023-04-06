@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+  labels:
+    app: users-backup
+  name: users-backup
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: users-backup
+  template:
+    metadata:
+      labels:
+        app: users-backup
+    spec:
+      containers:
+      - image: docker.io/asayah/users
+        imagePullPolicy: Always
+        name: users-backup
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      - image: docker.io/asayah/users-gql
+        imagePullPolicy: Always
+        name: users-backup-gql
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File        
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: users-backup
+  name: users-backup
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 4000
+  selector:
+    app: users-backup
+  sessionAffinity: None
+  type: ClusterIP

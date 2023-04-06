@@ -1,0 +1,19 @@
+
+apiVersion: apimanagement.gloo.solo.io/v2
+kind: ApiDoc
+metadata:
+  name: blogs
+  namespace: gloo-mesh
+spec:
+  graphql:
+    schemaDefinition: |-
+      type Query {
+        """Description of a blogs in HTML"""
+        getBlogs: [Blog]
+      }
+
+      type Blog {      
+        id: Int
+        content: String
+        title: String
+      }

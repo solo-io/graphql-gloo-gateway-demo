@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+  labels:
+    app: blogs
+  name: blogs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blogs
+  template:
+    metadata:
+      labels:
+        app: blogs
+    spec:
+      containers:
+      - image: docker.io/asayah/blogs
+        imagePullPolicy: Always
+        name: blogs
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File     
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: blogs
+  name: blogs
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: blogs
+  sessionAffinity: None
+  type: ClusterIP
