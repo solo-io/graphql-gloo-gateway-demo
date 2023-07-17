@@ -39,3 +39,11 @@ spec:
                 headers:
                   :path:
                     jq: '"/comments?blogid=" + (.parentVar.id | tostring)'
+        wordCount:  # NEW wordCount resolver begins HERE
+          variables:
+            parentBlog:
+              graphqlParent: {}
+          resolvers:
+            - mockResolver:  # mockResolvers can facilitate testing too
+                syncResponse:
+                  jq: '.parentBlog.content | split(" ") | length'
