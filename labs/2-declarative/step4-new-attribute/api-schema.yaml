@@ -15,7 +15,6 @@ spec:
       type Blog {      
         id: Int
         content: String
-        """ ADDING our new wordCount attribute HERE"""
         wordCount: Int
         title: String
         comments: [Comment] 
