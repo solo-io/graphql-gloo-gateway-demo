@@ -1,0 +1,32 @@
+
+apiVersion: apimanagement.gloo.solo.io/v2
+kind: ApiDoc
+metadata:
+  name: blogs
+  namespace: gloo-mesh
+spec:
+  graphql:
+    schemaDefinition: |-
+      type Query @cacheControl(maxAge: 60) {
+        """Description of a blogs in HTML"""
+        getBlogs: [Blog]
+      }
+
+      type Blog {      
+        id: Int
+        content: String
+        wordCount: Int
+        title: String
+        comments: [Comment] 
+        user: User
+      }
+
+      type User {
+        username: String
+      }
+
+      type Comment {
+        id: Int
+        user: User
+        comment: String
+      }

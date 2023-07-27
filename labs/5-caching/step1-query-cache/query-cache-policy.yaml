@@ -1,0 +1,12 @@
+apiVersion: resilience.policy.gloo.solo.io/v2
+kind: GraphQLPersistedQueryCachePolicy
+metadata:
+  name: blogs-query-cache
+  namespace: gloo-mesh
+spec:
+  applyToRoutes:
+  - route:
+      labels:
+        queryCache: "true"
+  config:
+    cacheSize: 1000
